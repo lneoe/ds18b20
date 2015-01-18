@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+  <head>
+  <link rel="stylesheet" type="text/css" href="http://cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" type="text/css" href="{{ static_url('style.css') }}"> -->
+  <script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.1.1-rc2/jquery.min.js"></script>
+  <!-- // <script type="text/javascript" src="http://cdn.staticfile.org/twitter-bootstrap/3.2.0/js/bootstrap.js"></script> -->
+  <!-- <script type="text/javascript" src="http://cdn.staticfile.org/Chart.js/1.0.1-beta.2/Chart.min.js"></script> -->
+  <script type="text/javascript" src="http://cdn.staticfile.org/highcharts/4.0.4/highcharts.js"></script>
+  </head>
+
+  <body>
+    <div class="content">
+      <div class="container">
+        <div class="row">
+          <div class="page-header">
+            <h1>客厅温度采集/<small>min</small></h1>
+          </div>
+          <div id="temperatureChart"></div>
+          <script type="text/javascript">
+            var now = new Date()
+            $(function () {
+              $('#temperatureChart').highcharts({
+                credits: {
+                  enabled: false
+                },
+
+                chart: {
+                  zoomType: 'x'
+                },
+
+                title: {
+                  text: '客厅温度采集图表'
+                },
+
+                subtitle: {
+                  text: document.ontouchstart === undefined ?
+                          'Click and drag in the plot area to zoom in' :
+                          'Pinch the chart to zoom in'
+                },
+
+                xAxis: {
+                  type: 'datetime',
+                  // minRange: 1 * 3600 * 1000, // one day
+                  maxZoom: 1 * 3600 * 1000, // one hour
+                  // minRange: Date.parse('{% raw data["labels"][-1] %} +0000') - Date.parse('{% raw data["labels"][0] %} +0000'),
+                  // maxZoom: 60 * 1000 // one minutes
+                },
+
+                yAxis: {
+                  title: {
+                    text: 'Temperature value'
+                  }
+                },
+
+                legend:{
+                  enabled:true
+                },
+
+                plotOptions: {
+                  area: {
+                    fillColor: {
+                      linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+                      stops: [
+                        [0, Highcharts.getOptions().colors[0]],
+                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                      ]
+                    },
+                    marker: {
+                      radius: 2
+                    },
+                    lineWidth: 1,
+                    states: {
+                      hover: {
+                        lineWidth: 1
+                      }
+                    },
+                    threshold: null
+                  }
+                },
+
+                series: [{
+                  type: 'area',
+                  name: 'Temperature',
+                  pointInterval: 60 * 1000,
+                  pointStart: Date.parse('{% raw data["labels"][0] %} +0000'),
+                  data: {{ data["data"] }}
+                }]
+
+              })
+            })
+          </script>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
