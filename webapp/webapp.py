@@ -47,7 +47,12 @@ def get_pretty_data(gt=None, lt=None):
         labels.append(row["createtime"])
         data.append(row["degrees_c"])
 
-    return {"labels": labels, "data": data}
+    lowest = min(data)
+    highest = max(data)
+    average = sum(data) / len(data)
+
+    return {"labels": labels, "data": data, "lowest": lowest,
+            "highest": highest, "average": average}
 
 
 class IndexHandler(tornado.web.RequestHandler):
