@@ -7,6 +7,7 @@
   <!-- // <script type="text/javascript" src="http://cdn.staticfile.org/twitter-bootstrap/3.2.0/js/bootstrap.js"></script> -->
   <!-- <script type="text/javascript" src="http://cdn.staticfile.org/Chart.js/1.0.1-beta.2/Chart.min.js"></script> -->
   <script type="text/javascript" src="http://cdn.staticfile.org/highcharts/4.0.4/highcharts.js"></script>
+  <!-- // <script type="text/javascript" src="http://cdn.staticfile.org/highcharts/4.0.4/modules/exporting.js"></script> -->
   </head>
 
   <body>
@@ -83,7 +84,8 @@
                   type: 'area',
                   name: 'Temperature',
                   pointInterval: 60 * 1000,
-                  pointStart: Date.parse('{% raw data["labels"][0] %} +0000'),
+                  // pointStart: Date.parse('{% raw data["labels"][0] %} +0000'),
+                  pointStart: {% raw data["labels"][0] %},
                   data: {{ data["data"] }}
                 }]
 
