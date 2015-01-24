@@ -2,7 +2,7 @@
 
 import os
 import logging
-import datetime
+import time
 import tornado.web
 import sqlite3
 import tornado.httpserver
@@ -13,7 +13,9 @@ from tornado.web import url
 
 
 conn = sqlite3.connect(
-    os.path.join(os.path.expanduser("~"), ".ds18b20/values.db"))
+    os.path.join(os.path.expanduser("~"), ".ds18b20/values.db"),
+    detect_types=sqlite3.PARSE_DECLTYPES
+)
 conn.row_factory = sqlite3.Row
 cursor = conn.cursor()
 
@@ -44,7 +46,7 @@ def get_pretty_data(gt=None, lt=None):
     labels = list()
     data = list()
     for row in rows:
-        labels.append(row["createtime"])
+        labels.append(time.mktime(row["createtime"].timetuple()))
         data.append(row["degrees_c"])
 
     lowest = min(data)
@@ -72,7 +74,6 @@ class TemperatureVauleHandler(tornado.web.RequestHandler):
         data = list()
         rows = cursor.execute(sql)
         for row in rows:
-            print row
             labels.append(row["createtime"])
             data.append(row["degrees_c"])
         return self.render_string({"labels": labels, "data": data})
