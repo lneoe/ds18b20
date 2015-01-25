@@ -19,7 +19,14 @@
           </div>
           <div id="temperatureChart"></div>
           <script type="text/javascript">
-            var now = new Date()
+            // var now = new Date();
+
+            Highcharts.setOptions({
+              global: {
+                useUTC: false
+              }
+            });
+
             $(function () {
               $('#temperatureChart').highcharts({
                 credits: {
@@ -85,7 +92,7 @@
                   name: 'Temperature',
                   pointInterval: 60 * 1000,
                   // pointStart: Date.parse('{% raw data["labels"][0] %} +0000'),
-                  pointStart: {% raw data["labels"][0] %},
+                  pointStart: {% raw data["labels"][0] * 1000 %},
                   data: {{ data["data"] }}
                 }]
 
